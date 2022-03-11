@@ -11,16 +11,22 @@ def generaliser(len_day, full, part):
     x_n = 0
     y_n = 0
 
-    if len_day < full_time:
+    if len_day < full:
         raise EOFError
 
     x_n += int(len_day / full) + (len_day - full)
+    x_n -= int(len_day/full)-1
+
+    y_n += int(len_day / part) + (len_day - part)
+    y_n -= int(len_day / part) - 1
 
     # x_n += len_day / full
     # x_n += (((len_day / full) - 1) * (full - 1))
 
-    y_n += len_day / part
-    y_n += (((len_day / part) - 1) * (part - 1))
+    # y_n += len_day / part
+    # y_n += (((len_day / part) - 1) * (part - 1))
+
+
 
     line_1 = []
     line_2 = []
@@ -49,6 +55,10 @@ def generaliser(len_day, full, part):
     ax1.set_xlabel('x')
     ax2.set_xlabel('y')
     ax1.set_ylabel('Hours of the Day')
+    labels1 = np.arange(1, x_n+1, 1)
+    labels2 = np.arange(1, y_n+1, 1)
+    ax1.set_xticks(labels1)
+    ax2.set_xticks(labels2)
     plt.show()
 
     return int(x_n), int(y_n)
