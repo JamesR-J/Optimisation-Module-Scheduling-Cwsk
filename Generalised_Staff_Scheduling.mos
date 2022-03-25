@@ -1,0 +1,37 @@
+!@encoding CP1252
+model ModelName
+uses "mmxprs"; !gain access to the Xpress-Optimizer solver
+
+declarations
+	length = 1..7
+	depth = 1..9
+	x: array(length) of MPVAR
+	constraints: array(depth) of REAL
+	x_val: array(length,depth) of REAL
+	profits: array(length) of REAL 
+	no_of_x: REAL
+end-declarations
+
+initialisations from "staff_scheduling_data.txt"
+	constraints
+	x_val
+	profits
+	no_of_x
+end-initializations
+
+profit:= SUM(i in length) profits(i)*x(i)
+
+FORALL(j in depth) DO
+	constraint(j) := SUM(k in length) x_val(k,j) * x(k) >= constraints(j)
+END-DO
+
+minimise(profit)
+
+writeln("Profit is ",getobjval)
+FORALL(l in length) DO
+	if l < no_of_x + 1 then writeln("x",(l)," = ",getsol(x(l)))
+	else writeln("y",(l-no_of_x)," = ",getsol(x(l)))
+	end-if
+END-DO
+
+end-model
